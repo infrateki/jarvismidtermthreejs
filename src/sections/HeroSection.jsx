@@ -1,8 +1,23 @@
-import { useState, useEffect } from 'react';
-import HeroScene from '../three/HeroScene';
-import MobileHeroScene from '../three/MobileHeroScene';
+import { useState, useEffect, lazy, Suspense, Component } from 'react';
 import { META } from '../data/meta';
 import useTheme from '../hooks/useTheme';
+
+// Lazy load Three.js scenes — don't block initial render on mobile
+const HeroScene = lazy(() => import('../three/HeroScene'));
+const MobileHeroScene = lazy(() => import('../three/MobileHeroScene'));
+
+// Error boundary — if Three.js crashes, show gradient fallback instead of white screen
+class ThreeErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { hasError: false }; }
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(err) { console.warn('Three.js scene failed to load:', err.message); }
+  render() {
+    if (this.state.hasError) {
+      return <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(0,240,255,0.08) 0%, transparent 70%), radial-gradient(ellipse at 80% 60%, rgba(255,181,71,0.05) 0%, transparent 60%)' }} />;
+    }
+    return this.props.children;
+  }
+}
 
 export default function HeroSection({ scrollProgress }) {
   const [screenSize, setScreenSize] = useState('loading');
@@ -19,23 +34,31 @@ export default function HeroSection({ scrollProgress }) {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  // Gradient fallback shown while lazy chunks load
+  const fallback = (
+    <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(0,240,255,0.06) 0%, transparent 70%)' }} />
+  );
+
   return (
     <section data-section="0" aria-label="Hero — Jarvis Mid-Term Review" style={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
 
-      {/* Desktop: full 3D scene with chrome JARVIS, PBR, environment map */}
-      {screenSize === 'desktop' && <HeroScene scrollProgress={scrollProgress} />}
+      <ThreeErrorBoundary>
+        <Suspense fallback={fallback}>
+          {screenSize === 'desktop' && <HeroScene scrollProgress={scrollProgress} />}
+          {screenSize === 'mobile' && <MobileHeroScene isDark={isDark} />}
+        </Suspense>
+      </ThreeErrorBoundary>
 
-      {/* Mobile: lightweight particles + wireframe + ring (no PBR, no env map, no Text3D) */}
-      {screenSize === 'mobile' && <MobileHeroScene isDark={isDark} />}
+      {/* Show gradient while loading */}
+      {screenSize === 'loading' && fallback}
 
-      {/* Bottom fade gradient */}
+      {/* Bottom fade */}
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(to top, var(--bg-primary), transparent)', zIndex: 1, pointerEvents: 'none' }} />
 
       {/* Text overlay */}
       <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', padding: '0 24px', marginTop: screenSize === 'desktop' ? 140 : 0 }}>
         <div className="section-label" style={{ marginBottom: 16, opacity: 0.7 }}>{META.id}</div>
 
-        {/* On mobile, show flat JARVIS text (3D Text3D only loads on desktop) */}
         {screenSize !== 'desktop' && (
           <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(42px, 12vw, 72px)', fontWeight: 800, lineHeight: 1.0, letterSpacing: '-2px', marginBottom: 16 }}>
             <span className="glow-text">JARVIS</span>

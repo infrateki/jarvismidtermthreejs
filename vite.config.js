@@ -5,11 +5,11 @@ export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     esbuildOptions: {
-      target: 'esnext',
+      target: 'es2020',
     },
   },
   build: {
-    target: 'esnext',
+    target: ['es2020', 'safari14'],
     rollupOptions: {
       output: {
         manualChunks: {
