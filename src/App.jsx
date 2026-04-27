@@ -3,6 +3,7 @@ import './index.css';
 import NavDots from './components/NavDots';
 import { ThemeProvider } from './hooks/useTheme.jsx';
 import ThemeToggle from './components/ThemeToggle';
+import AmbientAudio from './components/AmbientAudio';
 
 function LoadingOverlay({ onDone }) {
   const [fading, setFading] = useState(false);
@@ -97,6 +98,7 @@ export default function App() {
     >
       <NavDots activeIndex={activeSection} onNavigate={navigateToSection} />
       <ThemeToggle />
+      <AmbientAudio />
 
       <main id="main-content">
         <HeroSection scrollProgress={scrollProgress} />
