@@ -29,7 +29,7 @@ export default function AmbientAudio() {
       title={playing ? 'Mute ambient audio' : 'Play ambient audio'}
       aria-label={playing ? 'Mute ambient audio' : 'Play ambient audio'}
       style={{
-        position: 'fixed', top: 20, left: 68, zIndex: 100,
+        position: 'fixed', top: 68, left: 68, zIndex: 100,
         width: 40, height: 40, borderRadius: '50%',
         background: 'var(--bg-glass)',
         border: `1px solid ${playing ? 'var(--border-strong)' : 'var(--border-medium)'}`,

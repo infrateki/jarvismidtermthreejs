@@ -92,3 +92,6 @@ html, body, #root { width: 100%; height: 100%; font-family: 'DM Sans', sans-seri
 [data-theme="light"] .kpi-card::after { background: linear-gradient(90deg, transparent, rgba(14,116,144,0.25), transparent); }
 [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(14,116,144,0.2); }
 [data-theme="light"] .recharts-cartesian-grid-horizontal line, [data-theme="light"] .recharts-cartesian-grid-vertical line { stroke: rgba(14,116,144,0.08) !important; }
+
+.kanban-col::-webkit-scrollbar { width: 4px; }
+.kanban-col::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.15); border-radius: 2px; }

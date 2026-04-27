@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import Reveal from '../components/Reveal';
+import OpportunityModal from '../components/OpportunityModal';
 import { PIPELINE_STAGES } from '../data/pipeline';
 import { PORTALS } from '../data/portals';
 import { BIMSEARCH_HEALTH, PRIMARY_TARGETS, OPPORTUNITIES, KPI_SNAPSHOT, OPERATING_RHYTHM, RECENT_ALERTS, SCORING_MODEL } from '../data/opportunities';
@@ -26,6 +28,7 @@ function daysUntil(d) {
 }
 
 export default function PipelineSection() {
+  const [selectedOpp, setSelectedOpp] = useState(null);
   const stages = PIPELINE_STAGES || [];
   const health = BIMSEARCH_HEALTH || {};
   const targets = PRIMARY_TARGETS || [];
@@ -115,7 +118,7 @@ export default function PipelineSection() {
                 {hotOpps.map((opp, i) => {
                   const dl = daysUntil(opp.deadline);
                   return (
-                    <tr key={opp.id} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,240,255,0.03)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                    <tr key={opp.id} onClick={() => setSelectedOpp(opp.id)} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background 0.2s', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,240,255,0.03)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                       <td style={{ padding: '10px 12px', color: 'var(--text-muted)', fontFamily: "'JetBrains Mono', monospace", fontSize: 10 }}>{i + 1}</td>
                       <td style={{ padding: '10px 6px' }}>
                         <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, color: scoreColor(opp.score) }}>{opp.score}</span>
@@ -158,11 +161,11 @@ export default function PipelineSection() {
                   {cards.length === 0 ? (
                     <div style={{ fontSize: 10, color: 'var(--text-muted)', fontStyle: 'italic', padding: '16px 0', textAlign: 'center' }}>Empty</div>
                   ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div className="kanban-col" style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 500, overflowY: 'auto' }}>
                       {cards.map(opp => {
                         const dl = daysUntil(opp.deadline);
                         return (
-                          <div key={opp.id} className="glass-card" style={{ padding: '12px 14px' }}>
+                          <div key={opp.id} className="glass-card" onClick={() => setSelectedOpp(opp.id)} style={{ padding: '12px 14px', cursor: 'pointer' }}>
                             <div style={{ display: 'flex', gap: 6, marginBottom: 6, alignItems: 'center' }}>
                               <span style={{ padding: '1px 6px', borderRadius: 6, fontSize: 8, fontFamily: "'JetBrains Mono', monospace", background: `${TIER_COLORS[opp.tier]}15`, border: `1px solid ${TIER_COLORS[opp.tier]}30`, color: TIER_COLORS[opp.tier] }}>T{opp.tier}</span>
                               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 14, color: scoreColor(opp.score) }}>{opp.score}</span>
@@ -248,6 +251,7 @@ export default function PipelineSection() {
           </div>
         </Reveal>
       </div>
+      {selectedOpp && <OpportunityModal opportunityId={selectedOpp} onClose={() => setSelectedOpp(null)} />}
     </section>
   );
 }

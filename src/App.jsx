@@ -5,6 +5,7 @@ import NavDots from './components/NavDots';
 import { ThemeProvider } from './hooks/useTheme.jsx';
 import ThemeToggle from './components/ThemeToggle';
 import AmbientAudio from './components/AmbientAudio';
+import TopBar from './components/TopBar';
 import CommandCenterLayout from './bimsearch/layout/CommandCenterLayout';
 import DashboardPage from './bimsearch/pages/DashboardPage';
 import PipelinePage from './bimsearch/pages/PipelinePage';
@@ -28,6 +29,7 @@ import SprintSection from './sections/SprintSection';
 import PeopleSection from './sections/PeopleSection';
 import RoadmapSection from './sections/RoadmapSection';
 import QuestionsSection from './sections/QuestionsSection';
+import SuperJarvisSection from './sections/SuperJarvisSection';
 import LinksSection from './sections/LinksSection';
 
 function LoadingOverlay({ onDone }) {
@@ -101,8 +103,10 @@ function ReviewApp() {
           overflowY: 'auto',
           overflowX: 'hidden',
           background: 'var(--bg-primary)',
+          paddingTop: 48,
         }}
       >
+        <TopBar />
         <NavDots activeIndex={activeSection} onNavigate={navigateToSection} />
         <ThemeToggle />
         <AmbientAudio />
@@ -126,6 +130,7 @@ function ReviewApp() {
           <PeopleSection />
           <RoadmapSection />
           <QuestionsSection />
+          <SuperJarvisSection />
           <LinksSection />
           <ArcSection />
         </main>
