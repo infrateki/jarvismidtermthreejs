@@ -1,0 +1,16 @@
+export const ENTITIES = [
+  { name: 'Jorge', mentions: 2600, type: 'person' },
+  { name: 'PDBM', mentions: 1168, type: 'company' },
+  { name: 'MIA', mentions: 723, type: 'company' },
+  { name: 'AUS', mentions: 676, type: 'company' },
+  { name: 'USACE', mentions: 628, type: 'company' },
+  { name: 'PANYNJ', mentions: 589, type: 'company' },
+  { name: 'Miami-Dade', mentions: 537, type: 'company' },
+  { name: 'Sergio', mentions: 515, type: 'person' },
+  { name: 'Journey With AUS', mentions: 205, type: 'project' },
+  { name: 'USACE Caribbean', mentions: 117, type: 'project' },
+  { name: 'Julio', mentions: 110, type: 'person' },
+  { name: 'E25AV05', mentions: 102, type: 'project' },
+  { name: 'BIM Search', mentions: 83, type: 'project' },
+  { name: 'Shami', mentions: 39, type: 'person' },
+];

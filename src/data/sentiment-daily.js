@@ -1,0 +1,15 @@
+export const DAILY_SENTIMENT = [
+  { date: '2026-04-01', productive: 17, neutral: 37, frustrated: 5, exploratory: 14 },
+  { date: '2026-04-02', productive: 25, neutral: 46, frustrated: 25, exploratory: 27 },
+  { date: '2026-04-03', productive: 47, neutral: 73, frustrated: 23, exploratory: 36 },
+  { date: '2026-04-06', productive: 28, neutral: 119, frustrated: 27, exploratory: 32 },
+  { date: '2026-04-10', productive: 13, neutral: 46, frustrated: 17, exploratory: 17 },
+  { date: '2026-04-13', productive: 20, neutral: 38, frustrated: 15, exploratory: 8 },
+  { date: '2026-04-17', productive: 31, neutral: 50, frustrated: 15, exploratory: 13 },
+  { date: '2026-04-21', productive: 31, neutral: 78, frustrated: 49, exploratory: 23 },
+  { date: '2026-04-22', productive: 58, neutral: 112, frustrated: 40, exploratory: 32 },
+  { date: '2026-04-23', productive: 102, neutral: 205, frustrated: 81, exploratory: 67 },
+  { date: '2026-04-24', productive: 11, neutral: 82, frustrated: 13, exploratory: 19 },
+  { date: '2026-04-25', productive: 145, neutral: 560, frustrated: 195, exploratory: 178 },
+  { date: '2026-04-26', productive: 38, neutral: 117, frustrated: 32, exploratory: 23 },
+];
