@@ -41,10 +41,15 @@
 html { transition: background-color 0.4s ease, color 0.4s ease; }
 .glass-card, .milestone-card, .kpi-card, .nav-dot { transition: all 0.4s ease; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body, #root { width: 100%; height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; }
+html, body, #root { width: 100%; height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); }
+body { overflow: hidden; -webkit-text-size-adjust: 100%; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 3px; }
+
+/* iOS viewport height fix — 100vh is broken on Safari/Chrome iOS */
+.hero-height { height: 100vh; height: 100dvh; }
+
 .glow-text { background: linear-gradient(135deg, #00F0FF, #00B4D8, #0077B6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(0,240,255,0.5); margin-bottom: 12px; }
 .section-heading { font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: -1px; line-height: 1.1; margin-bottom: 48px; }
