@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import './index.css';
 import NavDots from './components/NavDots';
+import { ThemeProvider } from './hooks/useTheme.jsx';
+import ThemeToggle from './components/ThemeToggle';
 
 function LoadingOverlay({ onDone }) {
   const [fading, setFading] = useState(false);
@@ -78,7 +80,7 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <ThemeProvider>
       {!loaded && <LoadingOverlay onDone={() => setLoaded(true)} />}
       <a href="#main-content" className="skip-link">Skip to content</a>
     <div
@@ -92,6 +94,7 @@ export default function App() {
       }}
     >
       <NavDots activeIndex={activeSection} onNavigate={navigateToSection} />
+      <ThemeToggle />
 
       <main id="main-content">
         <HeroSection scrollProgress={scrollProgress} />
@@ -101,7 +104,6 @@ export default function App() {
         <TopicsSection />
         <EntitySection />
         <TimelineSection />
-        <ArcSection />
         <StrengthsGapsSection />
         <PipelineSection />
         <RiskSection />
@@ -109,8 +111,9 @@ export default function App() {
         <PeopleSection />
         <RoadmapSection />
         <QuestionsSection />
+        <ArcSection />
       </main>
     </div>
-    </>
+    </ThemeProvider>
   );
 }
