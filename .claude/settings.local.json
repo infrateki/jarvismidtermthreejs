@@ -16,7 +16,8 @@
       "Bash(vercel *)",
       "Bash(git commit -m 'fix: add missing files and update for Vercel deploy *)",
       "Bash(git commit -m 'feat\\(T2\\): add procedural BIM building + showcase section \\(B1-B3\\) *)",
-      "Bash(git commit -m 'chore: pick up Phase C integration changes from all terminals *)"
+      "Bash(git commit -m 'chore: pick up Phase C integration changes from all terminals *)",
+      "Bash(git commit *)"
     ]
   }
 }

@@ -1,24 +1,24 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { Environment, MeshTransmissionMaterial } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import useTheme from '../hooks/useTheme';
 
 const PARTICLE_COUNT = 500;
 const LINE_MAX = 200;
 const CHECK_COUNT = 80;
-const FLOAT_BASE_Y = -6;
 
 // Shared mutable ref so ConnectionLines reads Particles' live position array
-// without scene traversal (single scene instance)
 const sharedPos = { array: null };
 
 function buildDarkColors() {
   const col = new Float32Array(PARTICLE_COUNT * 3);
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     const r = Math.random();
-    if (r > 0.9)      { col[i*3]=0;   col[i*3+1]=0.94; col[i*3+2]=1;    } // cyan   10%
-    else if (r > 0.8) { col[i*3]=1;   col[i*3+1]=0.7;  col[i*3+2]=0.28; } // amber  10%
-    else               { col[i*3]=0.3; col[i*3+1]=0.4;  col[i*3+2]=0.6;  } // grey   80%
+    if (r > 0.9)      { col[i*3]=0;   col[i*3+1]=0.94; col[i*3+2]=1;    }
+    else if (r > 0.8) { col[i*3]=1;   col[i*3+1]=0.7;  col[i*3+2]=0.28; }
+    else               { col[i*3]=0.3; col[i*3+1]=0.4;  col[i*3+2]=0.6;  }
   }
   return col;
 }
@@ -27,11 +27,27 @@ function buildLightColors() {
   const col = new Float32Array(PARTICLE_COUNT * 3);
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     const r = Math.random();
-    if (r > 0.75)     { col[i*3]=0.03; col[i*3+1]=0.57; col[i*3+2]=0.7;  } // teal  25%
-    else if (r > 0.5) { col[i*3]=0.88; col[i*3+1]=0.48; col[i*3+2]=0.37; } // peach 25%
-    else               { col[i*3]=0.6;  col[i*3+1]=0.55; col[i*3+2]=0.5;  } // warm  50%
+    if (r > 0.75)     { col[i*3]=0.03; col[i*3+1]=0.57; col[i*3+2]=0.7;  }
+    else if (r > 0.5) { col[i*3]=0.88; col[i*3+1]=0.48; col[i*3+2]=0.37; }
+    else               { col[i*3]=0.6;  col[i*3+1]=0.55; col[i*3+2]=0.5;  }
   }
   return col;
+}
+
+// ── Circular soft-glow particle texture ────────────────────────────────────
+function makeParticleTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 64; canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 28);
+  gradient.addColorStop(0,   'rgba(255,255,255,1)');
+  gradient.addColorStop(0.5, 'rgba(255,255,255,0.5)');
+  gradient.addColorStop(1,   'rgba(255,255,255,0)');
+  ctx.beginPath();
+  ctx.arc(32, 32, 28, 0, Math.PI * 2);
+  ctx.fillStyle = gradient;
+  ctx.fill();
+  return new THREE.CanvasTexture(canvas);
 }
 
 // ── Particles ──────────────────────────────────────────────────────────────
@@ -40,7 +56,7 @@ function Particles({ isDark }) {
   const velocities = useRef([]);
   const prevIsDark = useRef(null);
 
-  const { positions, darkColors, lightColors } = useMemo(() => {
+  const { positions, darkColors, lightColors, particleTexture } = useMemo(() => {
     const pos = new Float32Array(PARTICLE_COUNT * 3);
     const vels = [];
     for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -55,27 +71,29 @@ function Particles({ isDark }) {
     }
     velocities.current = vels;
     sharedPos.array = pos;
-    return { positions: pos, darkColors: buildDarkColors(), lightColors: buildLightColors() };
+    return {
+      positions: pos,
+      darkColors: buildDarkColors(),
+      lightColors: buildLightColors(),
+      particleTexture: makeParticleTexture(),
+    };
   }, []);
 
-  // Initial color buffer starts as a copy of darkColors
   const initColors = useMemo(() => new Float32Array(darkColors), [darkColors]);
 
   useFrame(() => {
     if (!ref.current) return;
 
-    // Swap color buffer + material settings on theme change (not every frame)
     if (prevIsDark.current !== isDark) {
       prevIsDark.current = isDark;
       const src = isDark ? darkColors : lightColors;
       ref.current.geometry.attributes.color.array.set(src);
       ref.current.geometry.attributes.color.needsUpdate = true;
-      ref.current.material.blending  = isDark ? THREE.AdditiveBlending : THREE.NormalBlending;
-      ref.current.material.size      = isDark ? 1.8 : 2.2;
+      ref.current.material.blending   = isDark ? THREE.AdditiveBlending : THREE.NormalBlending;
+      ref.current.material.size       = isDark ? 2 : 2.5;
       ref.current.material.needsUpdate = true;
     }
 
-    // Animate positions with boundary bounce
     const pos  = ref.current.geometry.attributes.position.array;
     const vels = velocities.current;
     for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -96,13 +114,15 @@ function Particles({ isDark }) {
         <bufferAttribute attach="attributes-color"    args={[initColors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={isDark ? 1.8 : 2.2}
+        map={particleTexture}
+        size={isDark ? 2 : 2.5}
         vertexColors
         transparent
-        opacity={0.8}
+        opacity={0.85}
         depthWrite={false}
         blending={isDark ? THREE.AdditiveBlending : THREE.NormalBlending}
         sizeAttenuation
+        alphaTest={0.01}
       />
     </points>
   );
@@ -151,24 +171,113 @@ function ConnectionLines({ isDark }) {
   );
 }
 
-// ── Core Icosahedron ────────────────────────────────────────────────────────
-function CoreGeometry({ isDark }) {
+// ── Chrome Torus Knot ───────────────────────────────────────────────────────
+function ChromeKnot({ isDark }) {
   const ref = useRef();
   useFrame((_, delta) => {
     if (!ref.current) return;
-    ref.current.rotation.x += delta * 0.12;
+    ref.current.rotation.x += delta * 0.08;
     ref.current.rotation.y += delta * 0.08;
   });
   return (
     <mesh ref={ref}>
-      <icosahedronGeometry args={[4, 1]} />
-      <meshBasicMaterial
-        color={isDark ? '#00F0FF' : '#0E7490'}
-        wireframe transparent
-        opacity={isDark ? 0.12 : 0.08}
-        depthWrite={false}
+      <torusKnotGeometry args={[3, 0.8, 200, 32]} />
+      <meshStandardMaterial
+        metalness={1}
+        roughness={0.05}
+        color={isDark ? '#88ccff' : '#0E7490'}
+        envMapIntensity={2}
       />
     </mesh>
+  );
+}
+
+// ── Glass Orbiting Icosahedron ──────────────────────────────────────────────
+function GlassOrbit({ isDark }) {
+  const ref = useRef();
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime() * 0.3;
+    ref.current.position.x = Math.cos(t) * 6;
+    ref.current.position.z = Math.sin(t) * 6;
+    ref.current.position.y = Math.sin(t * 0.7) * 2;
+  });
+  return (
+    <mesh ref={ref}>
+      <icosahedronGeometry args={[2, 1]} />
+      <MeshTransmissionMaterial
+        backside
+        samples={8}
+        thickness={0.5}
+        chromaticAberration={0.2}
+        anisotropy={0.3}
+        distortion={0.2}
+        distortionScale={0.2}
+        temporalDistortion={0.1}
+        ior={1.5}
+        color={isDark ? '#00F0FF' : '#0891B2'}
+        transmissionSampler={false}
+      />
+    </mesh>
+  );
+}
+
+// ── Metallic Floating Shapes ────────────────────────────────────────────────
+function MetallicShapes({ isDark }) {
+  const octaRef  = useRef();
+  const dodecRef = useRef();
+  const tetraRef = useRef();
+
+  useFrame(({ clock }, delta) => {
+    const t = clock.getElapsedTime();
+
+    if (octaRef.current) {
+      octaRef.current.rotation.x += delta * 0.15;
+      octaRef.current.rotation.y += delta * 0.12;
+      octaRef.current.position.y = 4 + Math.sin(t * 0.6) * 0.6;
+    }
+    if (dodecRef.current) {
+      dodecRef.current.rotation.x -= delta * 0.1;
+      dodecRef.current.rotation.y -= delta * 0.13;
+    }
+    if (tetraRef.current) {
+      tetraRef.current.rotation.x += delta * 0.18;
+      tetraRef.current.rotation.z += delta * 0.12;
+    }
+  });
+
+  return (
+    <>
+      <mesh ref={octaRef} position={[-8, 4, -6]}>
+        <octahedronGeometry args={[1.2, 0]} />
+        <meshStandardMaterial
+          metalness={1}
+          roughness={0.1}
+          color="#FFB547"
+          envMapIntensity={1.5}
+        />
+      </mesh>
+
+      <mesh ref={dodecRef} position={[9, -3, -4]}>
+        <dodecahedronGeometry args={[0.8, 0]} />
+        <meshStandardMaterial
+          metalness={0.9}
+          roughness={0.15}
+          color="#A855F7"
+          envMapIntensity={1.5}
+        />
+      </mesh>
+
+      <mesh ref={tetraRef} position={[-5, -5, 3]}>
+        <tetrahedronGeometry args={[1, 0]} />
+        <meshStandardMaterial
+          metalness={1}
+          roughness={0}
+          color="#00F0FF"
+          envMapIntensity={2}
+        />
+      </mesh>
+    </>
   );
 }
 
@@ -183,77 +292,24 @@ function OrbitalRings({ isDark }) {
   return (
     <>
       <mesh ref={r1} rotation={[Math.PI / 2.5, 0, 0]}>
-        <torusGeometry args={[12, 0.05, 8, 80]} />
-        <meshBasicMaterial
+        <torusGeometry args={[12, 0.12, 16, 100]} />
+        <meshStandardMaterial
+          metalness={0.8}
+          roughness={0.2}
           color={isDark ? '#00F0FF' : '#0E7490'}
-          transparent opacity={isDark ? 0.15 : 0.1}
+          transparent
+          opacity={0.4}
           depthWrite={false}
         />
       </mesh>
       <mesh ref={r2} rotation={[Math.PI / 3, Math.PI / 6, 0]}>
-        <torusGeometry args={[16, 0.03, 8, 100]} />
-        <meshBasicMaterial
+        <torusGeometry args={[16, 0.08, 16, 120]} />
+        <meshStandardMaterial
+          metalness={0.8}
+          roughness={0.2}
           color={isDark ? '#FFB547' : '#E07A5F'}
-          transparent opacity={isDark ? 0.08 : 0.06}
-          depthWrite={false}
-        />
-      </mesh>
-    </>
-  );
-}
-
-// ── Floating Architectural Shapes (B4 + B5) ─────────────────────────────────
-function FloatingShapes({ isDark }) {
-  const torusRef = useRef();
-  const octaRef  = useRef();
-  const icoRef   = useRef();
-
-  useFrame(({ clock }, delta) => {
-    const t = clock.getElapsedTime();
-    if (torusRef.current) {
-      torusRef.current.rotation.x += delta * 0.1;
-      torusRef.current.rotation.y += delta * 0.1;
-      torusRef.current.rotation.z += delta * 0.1;
-    }
-    if (octaRef.current) {
-      octaRef.current.rotation.x -= delta * 0.1;
-      octaRef.current.rotation.y -= delta * 0.1;
-      octaRef.current.rotation.z -= delta * 0.07;
-    }
-    if (icoRef.current) {
-      icoRef.current.position.y = FLOAT_BASE_Y + Math.sin(t * 0.8) * 0.5;
-      icoRef.current.rotation.y += delta * 0.08;
-    }
-  });
-
-  return (
-    <>
-      {/* TorusKnot — r=2, tube=0.3, 100 tubular, 16 radial */}
-      <mesh ref={torusRef} position={[-10, 5, -5]}>
-        <torusKnotGeometry args={[2, 0.3, 100, 16]} />
-        <meshBasicMaterial
-          color={isDark ? '#00F0FF' : '#0E7490'}
-          wireframe transparent opacity={isDark ? 0.08 : 0.1}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* Octahedron — r=1.5, no detail */}
-      <mesh ref={octaRef} position={[12, -4, -8]}>
-        <octahedronGeometry args={[1.5, 0]} />
-        <meshBasicMaterial
-          color={isDark ? '#FFB547' : '#E07A5F'}
-          wireframe transparent opacity={isDark ? 0.06 : 0.08}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* Small Icosahedron — r=0.8, floating sine wave on Y */}
-      <mesh ref={icoRef} position={[-8, FLOAT_BASE_Y, 5]}>
-        <icosahedronGeometry args={[0.8, 1]} />
-        <meshBasicMaterial
-          color={isDark ? '#A855F7' : '#7A9E7E'}
-          wireframe transparent opacity={0.06}
+          transparent
+          opacity={0.3}
           depthWrite={false}
         />
       </mesh>
@@ -281,15 +337,36 @@ export default function HeroScene({ scrollProgress = 0 }) {
     <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
       <Canvas
         camera={{ position: [0, 0, 30], fov: 60, near: 0.1, far: 1000 }}
-        gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+        gl={{
+          alpha: true,
+          antialias: true,
+          powerPreference: 'high-performance',
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: isDark ? 1.2 : 0.8,
+        }}
         dpr={[1, 2]}
       >
+        <Environment preset="city" />
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
+        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#00F0FF" />
+
         <ScrollCamera scrollProgress={scrollProgress} />
-        <Particles        isDark={isDark} />
-        <ConnectionLines  isDark={isDark} />
-        <CoreGeometry     isDark={isDark} />
-        <OrbitalRings     isDark={isDark} />
-        <FloatingShapes   isDark={isDark} />
+        <Particles       isDark={isDark} />
+        <ConnectionLines isDark={isDark} />
+        <ChromeKnot      isDark={isDark} />
+        <GlassOrbit      isDark={isDark} />
+        <MetallicShapes  isDark={isDark} />
+        <OrbitalRings    isDark={isDark} />
+
+        <EffectComposer>
+          <Bloom
+            luminanceThreshold={0.6}
+            luminanceSmoothing={0.9}
+            intensity={isDark ? 1.2 : 0.4}
+            mipmapBlur
+          />
+        </EffectComposer>
       </Canvas>
     </div>
   );
