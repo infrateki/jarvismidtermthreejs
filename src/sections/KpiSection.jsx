@@ -28,10 +28,10 @@ export default function KpiSection() {
         </div>
         <Reveal delay={500}>
           <div style={{ marginTop: 64, padding: '32px 40px', borderLeft: '3px solid var(--cyan-400)', background: 'rgba(0,240,255,0.02)', borderRadius: '0 12px 12px 0' }}>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(16px, 2vw, 20px)', fontWeight: 500, lineHeight: 1.7, color: 'rgba(200,214,229,0.8)', fontStyle: 'italic' }}>
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 'clamp(16px, 2vw, 20px)', fontWeight: 500, lineHeight: 1.7, color: 'var(--text-primary)', fontStyle: 'italic' }}>
               "Be Jorge's proactive right hand: find the right airport BIM opportunities, remember the context, and convert intelligence into action — before he has to ask."
             </p>
-            <div style={{ marginTop: 16, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(0,240,255,0.4)', letterSpacing: 2 }}>— NORTH STAR DIRECTIVE</div>
+            <div style={{ marginTop: 16, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--cyan-400)', opacity: 0.4, letterSpacing: 2 }}>— NORTH STAR DIRECTIVE</div>
           </div>
         </Reveal>
       </div>

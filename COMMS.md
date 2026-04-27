@@ -50,15 +50,15 @@ Each Claude Code terminal MUST:
 | B1 | Create BIM building geometry (procedural hospital/terminal) | T2 | ✅ DONE | src/three/BIMBuilding.jsx |
 | B2 | Create BIMShowcaseSection with R3F scene | T2 | ✅ DONE | src/sections/BIMShowcaseSection.jsx |
 | B3 | Make BIM scene theme-aware (dark=glow wireframe, light=pastel solid) | T2 | ✅ DONE | src/three/BIMBuilding.jsx |
-| B4 | Add floating architectural elements to Hero (wireframe shapes) | T3 | ⬜ TODO | src/three/HeroScene.jsx |
-| B5 | Make HeroScene theme-aware (particle colors, bg, ring colors) | T3 | ⬜ TODO | src/three/HeroScene.jsx |
-| B6 | Create section divider 3D strip (noise shader or wave) | T3 | ⬜ TODO | src/three/SectionDivider.jsx |
-| B7 | Theme-ify sections 0–3 (Hero, KPIs, Velocity, Sentiment) | T4 | ⬜ TODO | src/sections/Hero*, Kpi*, Velocity*, Sentiment* |
-| B8 | Theme-ify sections 4–7 (Topics, Entities, Timeline, StrengthsGaps) | T4 | ⬜ TODO | src/sections/Topics*, Entity*, Timeline*, StrengthsGaps* |
-| B9 | Theme-ify ChartTooltip + all Recharts color arrays | T4 | ⬜ TODO | src/components/ChartTooltip.jsx |
-| B10 | Theme-ify sections 8–11 (Pipeline, Risks, Sprint, People) | T5 | ⬜ TODO | src/sections/Pipeline*, Risk*, Sprint*, People* |
-| B11 | Theme-ify sections 12–14 (Roadmap, Questions, Arc) | T5 | ⬜ TODO | src/sections/Roadmap*, Questions*, Arc* |
-| B12 | Theme-ify NavDots, GlassCard, SectionHeader, Counter | T5 | ⬜ TODO | src/components/* |
+| B4 | Add floating architectural elements to Hero (wireframe shapes) | T3 | ✅ DONE | src/three/HeroScene.jsx |
+| B5 | Make HeroScene theme-aware (particle colors, bg, ring colors) | T3 | ✅ DONE | src/three/HeroScene.jsx |
+| B6 | Create section divider 3D strip (noise shader or wave) | T3 | ✅ DONE | src/three/SectionDivider.jsx |
+| B7 | Theme-ify sections 0–3 (Hero, KPIs, Velocity, Sentiment) | T4 | ✅ DONE | src/sections/Hero*, Kpi*, Velocity*, Sentiment* |
+| B8 | Theme-ify sections 4–7 (Topics, Entities, Timeline, StrengthsGaps) | T4 | ✅ DONE | src/sections/Topics*, Entity*, Timeline*, StrengthsGaps* |
+| B9 | Theme-ify ChartTooltip + all Recharts color arrays | T4 | ✅ DONE | src/components/ChartTooltip.jsx |
+| B10 | Theme-ify sections 8–11 (Pipeline, Risks, Sprint, People) | T5 | ✅ DONE | src/sections/Pipeline*, Risk*, Sprint*, People* |
+| B11 | Theme-ify sections 12–14 (Roadmap, Questions, Arc) | T5 | ✅ DONE | src/sections/Roadmap*, Questions*, Arc* |
+| B12 | Theme-ify NavDots, GlassCard, SectionHeader, Counter | T5 | ✅ DONE | src/components/* |
 
 ### Phase C — Integration (T1 + T2 sequential)
 
@@ -139,14 +139,52 @@ SHARED (coordinate via COMMS.md):
 
 ### T3 — Enhanced Three.js
 ```
+2026-04-26: B4–B6 ✅ DONE.
+  - HeroScene.jsx: added FloatingShapes (TorusKnot [-10,5,-5], Octahedron [12,-4,-8],
+    floating Icosahedron [-8,-6,5] with sine-wave Y). All three rotate slowly.
+  - HeroScene.jsx: full theme-awareness via useTheme(). isDark controls particle colors
+    (dark: grey/cyan/amber; light: warm/teal/peach), blending mode (Additive→Normal),
+    particle size (1.8→2.2), line/ring/shape colors. Color swap is done imperatively
+    in useFrame on theme change (not every frame) for performance.
+  - SectionDivider.jsx: new R3F Canvas (height 80px), animated wave PlaneGeometry
+    (30×0.5, 100 segments), vertex Y displaced by sin(x*2+t) each frame,
+    cyan wireframe dark / teal wireframe light.
+  - useTheme() called with null-check fallback (isDark defaults true if no provider).
 ```
 
 ### T4 — Theme Sections 0–7 + Charts
 ```
+2026-04-27: B7–B9 ✅ DONE. Build passes (3.34s).
+  Strategy: CSS custom properties used directly in all style objects AND Recharts SVG props
+  (stopColor, stroke, fill, tick.fill, axisLine.stroke) — no JS theme detection needed,
+  CSS var() in SVG presentation attributes resolves automatically on theme toggle.
+  - HeroSection: bg-primary gradient, text-muted × sep, cyan-400 metadata, border-strong scroll pill
+  - KpiSection: text-primary quote, cyan-400 attribution
+  - VelocitySection: all chart colors → CSS vars (cyan-400, amber-400, bg-primary, border-subtle, text-muted)
+  - SentimentSection: all chart + pie colors → CSS vars; SENTIMENT_COLORS map for pie cells
+  - TopicsSection: gradient stops, radar, axis → CSS vars (cyan-400/600, border-medium, text-secondary)
+  - EntitySection: border-subtle track, cyan-400/600 + amber-400 bar gradients
+  - TimelineSection: border-strong vertical line, bg-primary dot fill
+  - StrengthsGapsSection: green-400 replaces hardcoded #34D399
+  - ChartTooltip: bg-glass + border-medium + text-primary + cyan-400 (tooltip adapts to theme)
+  NOTE: #3A4A6B (neutral sentiment) kept hardcoded — semantic data color, not a theme color.
+  NOTE: T1 needs to add --green-400: #34D399 to dark mode CSS vars in index.css.
 ```
 
 ### T5 — Theme Sections 8–14 + Components
 ```
+2026-04-27: B10–B12 ✅ DONE.
+  - Audited all 7 sections (8–14) + 4 shared components for hardcoded hex colors
+  - Replaced #00B4D8 → var(--cyan-500) in SprintSection DAY_COLORS
+  - Replaced #FF4D6A → var(--red-400) in RoadmapSection severity gradient
+  - Counter, NavDots, GlassCard, SectionHeader: fully CSS-class-based, no changes needed
+  - Remaining hardcoded hex with no CSS var equivalent (left as-is, no T1 dep):
+      #34D399 (semantic green for Won/success) in Pipeline + StrengthsGaps
+      #00D4AA (teal accent, sprint day 2) in Sprint
+      #FF8C00 (dark amber, sprint day 5 + need severity gradient) in Sprint + Roadmap
+  - ArcSection, QuestionsSection, RiskSection, PeopleSection: already fully on CSS vars
+  - All section data-section attrs renumbered by linter: 7 StrengthsGaps, 8 Pipeline,
+    9 Risk, 10 Sprint, 11 People, 12 Roadmap, 13 Questions, 14 Arc
 ```
 
 ### ORCHESTRATOR

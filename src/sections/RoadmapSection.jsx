@@ -97,7 +97,7 @@ export default function RoadmapSection() {
                       height: '100%',
                       borderRadius: 2,
                       background: need.severity === 5
-                        ? 'linear-gradient(90deg, #FF4D6A, #FF8C00)'
+                        ? 'linear-gradient(90deg, var(--red-400), #FF8C00)'
                         : 'linear-gradient(90deg, var(--amber-400), #FFD47A)',
                     }} />
                   </div>

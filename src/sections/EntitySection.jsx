@@ -27,10 +27,10 @@ export default function EntitySection() {
                     </div>
                     <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: 'var(--text-tertiary)' }}>{entity.mentions.toLocaleString()}</span>
                   </div>
-                  <div style={{ width: '100%', height: 6, borderRadius: 3, background: 'rgba(0,240,255,0.06)', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: 6, borderRadius: 3, background: 'var(--border-subtle)', overflow: 'hidden' }}>
                     <div className="entity-bar-fill" style={{
                       width: `${pct}%`, height: '100%', borderRadius: 3,
-                      background: isPerson ? 'linear-gradient(90deg, #FFB547, #FF8C00)' : 'linear-gradient(90deg, #0077B6, #00F0FF)',
+                      background: isPerson ? 'linear-gradient(90deg, var(--amber-400), #FF8C00)' : 'linear-gradient(90deg, var(--cyan-600), var(--cyan-400))',
                     }} />
                   </div>
                 </div>

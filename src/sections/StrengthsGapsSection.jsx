@@ -43,12 +43,12 @@ export default function StrengthsGapsSection() {
           {/* Strengths */}
           <div className="glass-card" style={{ padding: '28px 28px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34D399', boxShadow: '0 0 10px #34D399' }} />
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16, color: '#34D399' }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--green-400)', boxShadow: '0 0 10px var(--green-400)' }} />
+              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16, color: 'var(--green-400)' }}>
                 What's Working
               </span>
             </div>
-            <ItemList items={strengths} accent="rgba(52,211,153,0.6)" />
+            <ItemList items={strengths} accent="var(--green-400)" />
           </div>
 
           {/* Gaps */}

@@ -6,7 +6,7 @@ const sprint = SPRINT || [];
 const DAY_COLORS = [
   'var(--cyan-400)',
   '#00D4AA',
-  '#00B4D8',
+  'var(--cyan-500)',
   'var(--amber-400)',
   '#FF8C00',
   'var(--red-400)',

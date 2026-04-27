@@ -13,11 +13,11 @@ export default function TimelineSection() {
           </h2>
         </Reveal>
         <div style={{ position: 'relative', paddingLeft: 32 }}>
-          <div style={{ position: 'absolute', left: 11, top: 0, bottom: 0, width: 1, background: 'linear-gradient(to bottom, rgba(0,240,255,0.3), rgba(0,240,255,0.05))' }} />
+          <div style={{ position: 'absolute', left: 11, top: 0, bottom: 0, width: 1, background: 'linear-gradient(to bottom, var(--border-strong), transparent)' }} />
           {MILESTONES.map((m, i) => (
             <Reveal key={i} delay={i * 100}>
               <div style={{ marginBottom: 24, position: 'relative' }}>
-                <div style={{ position: 'absolute', left: -27, top: 8, width: 12, height: 12, borderRadius: '50%', border: `2px solid ${PHASE_COLORS[m.phase]}`, background: '#060A18', zIndex: 2 }} />
+                <div style={{ position: 'absolute', left: -27, top: 8, width: 12, height: 12, borderRadius: '50%', border: `2px solid ${PHASE_COLORS[m.phase]}`, background: 'var(--bg-primary)', zIndex: 2 }} />
                 <div className="milestone-card">
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
                     <div>

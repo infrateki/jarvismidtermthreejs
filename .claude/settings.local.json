@@ -7,7 +7,15 @@
       "Bash(npx vite *)",
       "Bash(git init *)",
       "Bash(git remote *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git config *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "mcp__claude_ai_Vercel__deploy_to_vercel",
+      "Bash(vercel *)",
+      "Bash(git commit -m 'fix: add missing files and update for Vercel deploy *)",
+      "Bash(git commit -m 'feat\\(T2\\): add procedural BIM building + showcase section \\(B1-B3\\) *)"
     ]
   }
 }

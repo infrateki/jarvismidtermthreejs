@@ -23,21 +23,21 @@ export default function VelocitySection() {
               <AreaChart data={DAILY_MESSAGES} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="msgGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00F0FF" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="#00F0FF" stopOpacity={0} />
+                    <stop offset="0%" stopColor="var(--cyan-400)" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="var(--cyan-400)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="day" tick={{ fill: 'rgba(200,214,229,0.25)', fontSize: 10 }} axisLine={{ stroke: 'rgba(0,240,255,0.08)' }} tickLine={false} />
-                <YAxis tick={{ fill: 'rgba(200,214,229,0.25)', fontSize: 10 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="day" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={{ stroke: 'var(--border-subtle)' }} tickLine={false} />
+                <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} />
-                <Area type="monotone" dataKey="messages" stroke="#00F0FF" strokeWidth={2} fill="url(#msgGrad)" dot={false} activeDot={{ r: 4, fill: '#00F0FF', stroke: '#060A18', strokeWidth: 2 }} />
+                <Area type="monotone" dataKey="messages" stroke="var(--cyan-400)" strokeWidth={2} fill="url(#msgGrad)" dot={false} activeDot={{ r: 4, fill: 'var(--cyan-400)', stroke: 'var(--bg-primary)', strokeWidth: 2 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </Reveal>
         <Reveal delay={350}>
           <div style={{ marginTop: 24 }}>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(0,240,255,0.5)', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--text-tertiary)', marginBottom: 16 }}>
               Anthropic vs OpenAI — Model Era Volume
             </div>
             <div className="glass-card" style={{ padding: '32px 16px 16px' }}>
@@ -45,19 +45,19 @@ export default function VelocitySection() {
                 <AreaChart data={ERA_VOLUME} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="anthropicGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#00F0FF" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="#00F0FF" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--cyan-400)" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="var(--cyan-400)" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="openaiGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#FFB547" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="#FFB547" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--amber-400)" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="var(--amber-400)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <XAxis dataKey="date" tick={{ fill: 'rgba(200,214,229,0.25)', fontSize: 9 }} axisLine={{ stroke: 'rgba(0,240,255,0.08)' }} tickLine={false} />
-                  <YAxis tick={{ fill: 'rgba(200,214,229,0.25)', fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <XAxis dataKey="date" tick={{ fill: 'var(--text-muted)', fontSize: 9 }} axisLine={{ stroke: 'var(--border-subtle)' }} tickLine={false} />
+                  <YAxis tick={{ fill: 'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false} />
                   <Tooltip content={<ChartTooltip />} />
-                  <Area type="monotone" dataKey="anthropic" name="Anthropic" stroke="#00F0FF" strokeWidth={2} fill="url(#anthropicGrad)" dot={false} activeDot={{ r: 4, fill: '#00F0FF', stroke: '#060A18', strokeWidth: 2 }} stackId="era" />
-                  <Area type="monotone" dataKey="openai" name="OpenAI" stroke="#FFB547" strokeWidth={2} fill="url(#openaiGrad)" dot={false} activeDot={{ r: 4, fill: '#FFB547', stroke: '#060A18', strokeWidth: 2 }} stackId="era" />
+                  <Area type="monotone" dataKey="anthropic" name="Anthropic" stroke="var(--cyan-400)" strokeWidth={2} fill="url(#anthropicGrad)" dot={false} activeDot={{ r: 4, fill: 'var(--cyan-400)', stroke: 'var(--bg-primary)', strokeWidth: 2 }} stackId="era" />
+                  <Area type="monotone" dataKey="openai" name="OpenAI" stroke="var(--amber-400)" strokeWidth={2} fill="url(#openaiGrad)" dot={false} activeDot={{ r: 4, fill: 'var(--amber-400)', stroke: 'var(--bg-primary)', strokeWidth: 2 }} stackId="era" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
