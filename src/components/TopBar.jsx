@@ -16,8 +16,8 @@ const SECTIONS = [
   { label: 'Links',       ds: 15 },
 ];
 
-// Desktop pills — first 7 non-Hero sections
-const DESKTOP_PILLS = SECTIONS.slice(1, 8);
+// Desktop pills — KPIs through BIM 3D, plus Links at the end
+const DESKTOP_PILLS = [...SECTIONS.slice(1, 8), SECTIONS.find(s => s.label === 'Links')];
 
 export default function TopBar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,10 +49,20 @@ export default function TopBar() {
           <span style={{ width: 20, height: 2, background: 'var(--text-primary)', borderRadius: 1, transition: 'transform 0.3s', display: 'block', transform: menuOpen ? 'rotate(-45deg) translateY(-6px)' : 'none' }} />
         </button>
 
-        {/* Brand */}
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+        {/* Brand — click to scroll to top */}
+        <button
+          onClick={() => scrollTo(0)}
+          style={{
+            background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px',
+            fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3,
+            color: 'var(--text-tertiary)', textTransform: 'uppercase', transition: 'color 0.2s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-tertiary)'; }}
+          aria-label="Scroll to top"
+        >
           JARVIS · PDBM
-        </span>
+        </button>
 
         {/* Desktop pills */}
         <div className="hide-mobile" style={{ display: 'flex', gap: 6 }}>
