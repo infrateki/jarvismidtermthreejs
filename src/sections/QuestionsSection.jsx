@@ -16,7 +16,7 @@ export default function QuestionsSection() {
   const grouped = groupByCategory(questions);
 
   return (
-    <section data-section="13" style={{ padding: '80px 0 160px' }}>
+    <section data-section="14" style={{ padding: '80px 0 160px' }}>
       <div className="container">
         <Reveal>
           <div className="section-label">Chapter XVI</div>

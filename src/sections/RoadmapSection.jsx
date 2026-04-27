@@ -15,7 +15,7 @@ const columns = [
 
 export default function RoadmapSection() {
   return (
-    <section data-section="12" style={{ padding: '80px 0 120px' }}>
+    <section data-section="13" style={{ padding: '80px 0 120px' }}>
       <div className="container">
         <Reveal>
           <div className="section-label">Chapter XV</div>

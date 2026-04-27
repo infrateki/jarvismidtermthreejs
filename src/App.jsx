@@ -33,7 +33,9 @@ import TopicsSection from './sections/TopicsSection';
 import EntitySection from './sections/EntitySection';
 import TimelineSection from './sections/TimelineSection';
 import ArcSection from './sections/ArcSection';
+import BIMShowcaseSection from './sections/BIMShowcaseSection';
 import StrengthsGapsSection from './sections/StrengthsGapsSection';
+import SectionDivider from './three/SectionDivider';
 import PipelineSection from './sections/PipelineSection';
 import RiskSection from './sections/RiskSection';
 import SprintSection from './sections/SprintSection';
@@ -99,13 +101,17 @@ export default function App() {
       <main id="main-content">
         <HeroSection scrollProgress={scrollProgress} />
         <KpiSection />
+        <SectionDivider />
         <VelocitySection />
         <SentimentSection />
+        <SectionDivider />
         <TopicsSection />
         <EntitySection />
         <TimelineSection />
+        <SectionDivider />
         <StrengthsGapsSection />
         <PipelineSection />
+        <BIMShowcaseSection />
         <RiskSection />
         <SprintSection />
         <PeopleSection />

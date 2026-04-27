@@ -2,13 +2,7 @@ import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import * as THREE from 'three';
-
-let useTheme;
-try {
-  useTheme = require('../hooks/useTheme').default;
-} catch {
-  useTheme = null;
-}
+import useTheme from '../hooks/useTheme.jsx';
 
 function EdgedMesh({ geometry, color, opacity, wireframe }) {
   const edgesGeo = useMemo(() => new THREE.EdgesGeometry(geometry), [geometry]);
@@ -120,15 +114,8 @@ function RotatingBuilding({ isDark }) {
 }
 
 export default function BIMBuilding() {
-  let isDark = true;
-  try {
-    if (typeof useTheme === 'function') {
-      const theme = useTheme();
-      if (theme && typeof theme.isDark !== 'undefined') isDark = theme.isDark;
-    }
-  } catch {
-    isDark = true;
-  }
+  const themeCtx = useTheme();
+  const isDark = themeCtx ? themeCtx.isDark : true;
 
   return (
     <Float speed={1} floatIntensity={0.3} rotationIntensity={0}>

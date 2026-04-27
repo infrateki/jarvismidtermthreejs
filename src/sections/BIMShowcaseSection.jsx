@@ -14,14 +14,14 @@ function StatPill({ label }) {
   return (
     <span style={{
       padding: '6px 14px',
-      border: '1px solid rgba(0,240,255,0.2)',
+      border: '1px solid var(--border-medium)',
       borderRadius: 20,
       fontFamily: "'JetBrains Mono', monospace",
       fontSize: 11,
       letterSpacing: 2,
       textTransform: 'uppercase',
-      color: 'rgba(0,240,255,0.7)',
-      background: 'rgba(0,240,255,0.05)',
+      color: 'var(--cyan-400)',
+      background: 'var(--border-subtle)',
     }}>
       {label}
     </span>
@@ -31,7 +31,7 @@ function StatPill({ label }) {
 export default function BIMShowcaseSection() {
   return (
     <section
-      data-section="15"
+      data-section="9"
       aria-label="BIM Intelligence in 3D"
       style={{ padding: '120px 0' }}
     >

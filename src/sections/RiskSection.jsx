@@ -5,7 +5,7 @@ const risks = RISKS || [];
 
 export default function RiskSection() {
   return (
-    <section data-section="9" style={{ padding: '80px 0 120px' }}>
+    <section data-section="10" style={{ padding: '80px 0 120px' }}>
       <div className="container">
         <Reveal>
           <div className="section-label">Chapter XIII</div>

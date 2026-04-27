@@ -7,7 +7,7 @@ const agents = AGENTS || [];
 
 export default function PeopleSection() {
   return (
-    <section data-section="11" style={{ padding: '80px 0 120px' }}>
+    <section data-section="12" style={{ padding: '80px 0 120px' }}>
       <div className="container">
         <Reveal>
           <div className="section-label">Chapter XII</div>

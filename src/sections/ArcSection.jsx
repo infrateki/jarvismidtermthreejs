@@ -2,7 +2,7 @@ import Reveal from '../components/Reveal';
 
 export default function ArcSection() {
   return (
-    <section data-section="14" style={{ padding: '120px 0 160px' }}>
+    <section data-section="15" style={{ padding: '120px 0 160px' }}>
       <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', padding: '0 24px' }}>
         <Reveal>
           <div className="section-label" style={{ marginBottom: 16 }}>The Arc</div>
