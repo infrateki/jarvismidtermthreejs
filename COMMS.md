@@ -47,9 +47,9 @@ Each Claude Code terminal MUST:
 
 | # | Task | Owner | Status | File(s) |
 |---|---|---|---|---|
-| B1 | Create BIM building geometry (procedural hospital/terminal) | T2 | ⬜ TODO | src/three/BIMBuilding.jsx |
-| B2 | Create BIMShowcaseSection with R3F scene | T2 | ⬜ TODO | src/sections/BIMShowcaseSection.jsx |
-| B3 | Make BIM scene theme-aware (dark=glow wireframe, light=pastel solid) | T2 | ⬜ TODO | src/three/BIMBuilding.jsx |
+| B1 | Create BIM building geometry (procedural hospital/terminal) | T2 | ✅ DONE | src/three/BIMBuilding.jsx |
+| B2 | Create BIMShowcaseSection with R3F scene | T2 | ✅ DONE | src/sections/BIMShowcaseSection.jsx |
+| B3 | Make BIM scene theme-aware (dark=glow wireframe, light=pastel solid) | T2 | ✅ DONE | src/three/BIMBuilding.jsx |
 | B4 | Add floating architectural elements to Hero (wireframe shapes) | T3 | ⬜ TODO | src/three/HeroScene.jsx |
 | B5 | Make HeroScene theme-aware (particle colors, bg, ring colors) | T3 | ⬜ TODO | src/three/HeroScene.jsx |
 | B6 | Create section divider 3D strip (noise shader or wave) | T3 | ⬜ TODO | src/three/SectionDivider.jsx |
@@ -128,6 +128,13 @@ SHARED (coordinate via COMMS.md):
 
 ### T2 — 3D BIM Showcase
 ```
+2026-04-27: B1–B3 ✅ DONE. Build passes (3.38s).
+  - src/three/BIMBuilding.jsx — procedural hospital/terminal, Float wrapper, slow Y-rotation,
+    dark=cyan wireframe, light=teal solid + EdgesGeometry + warm ground plane
+  - src/sections/BIMShowcaseSection.jsx — 2-col layout, R3F Canvas, OrbitControls autoRotate,
+    data-section="15", responsive (stacks on ≤768px)
+  - useTheme imported with safe try/catch fallback (isDark defaults to true)
+  - BIMShowcaseSection.jsx ready — needs to be added to App.jsx in Phase C (T1 owns App.jsx)
 ```
 
 ### T3 — Enhanced Three.js
