@@ -1,9 +1,34 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import NavDots from './components/NavDots';
 import { ThemeProvider } from './hooks/useTheme.jsx';
 import ThemeToggle from './components/ThemeToggle';
 import AmbientAudio from './components/AmbientAudio';
+import CommandCenterLayout from './bimsearch/layout/CommandCenterLayout';
+import DashboardPage from './bimsearch/pages/DashboardPage';
+import PipelinePage from './bimsearch/pages/PipelinePage';
+import PortalsPage from './bimsearch/pages/PortalsPage';
+import ContactsPage from './bimsearch/pages/ContactsPage';
+
+import HeroSection from './sections/HeroSection';
+import KpiSection from './sections/KpiSection';
+import VelocitySection from './sections/VelocitySection';
+import SentimentSection from './sections/SentimentSection';
+import TopicsSection from './sections/TopicsSection';
+import EntitySection from './sections/EntitySection';
+import TimelineSection from './sections/TimelineSection';
+import ArcSection from './sections/ArcSection';
+import BIMShowcaseSection from './sections/BIMShowcaseSection';
+import StrengthsGapsSection from './sections/StrengthsGapsSection';
+import SectionDivider from './three/SectionDivider';
+import PipelineSection from './sections/PipelineSection';
+import RiskSection from './sections/RiskSection';
+import SprintSection from './sections/SprintSection';
+import PeopleSection from './sections/PeopleSection';
+import RoadmapSection from './sections/RoadmapSection';
+import QuestionsSection from './sections/QuestionsSection';
+import LinksSection from './sections/LinksSection';
 
 function LoadingOverlay({ onDone }) {
   const [fading, setFading] = useState(false);
@@ -26,25 +51,8 @@ function LoadingOverlay({ onDone }) {
     </div>
   );
 }
-import HeroSection from './sections/HeroSection';
-import KpiSection from './sections/KpiSection';
-import VelocitySection from './sections/VelocitySection';
-import SentimentSection from './sections/SentimentSection';
-import TopicsSection from './sections/TopicsSection';
-import EntitySection from './sections/EntitySection';
-import TimelineSection from './sections/TimelineSection';
-import ArcSection from './sections/ArcSection';
-import BIMShowcaseSection from './sections/BIMShowcaseSection';
-import StrengthsGapsSection from './sections/StrengthsGapsSection';
-import SectionDivider from './three/SectionDivider';
-import PipelineSection from './sections/PipelineSection';
-import RiskSection from './sections/RiskSection';
-import SprintSection from './sections/SprintSection';
-import PeopleSection from './sections/PeopleSection';
-import RoadmapSection from './sections/RoadmapSection';
-import QuestionsSection from './sections/QuestionsSection';
 
-export default function App() {
+function ReviewApp() {
   const containerRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState(0);
@@ -59,7 +67,6 @@ export default function App() {
       const scrollHeight = el.scrollHeight - el.clientHeight;
       setScrollProgress(scrollHeight > 0 ? scrollTop / scrollHeight : 0);
 
-      // Determine active section
       const sections = el.querySelectorAll('[data-section]');
       sections.forEach((s, i) => {
         const rect = s.getBoundingClientRect();
@@ -83,45 +90,64 @@ export default function App() {
   }, []);
 
   return (
-    <ThemeProvider>
+    <>
       {!loaded && <LoadingOverlay onDone={() => setLoaded(true)} />}
       <a href="#main-content" className="skip-link">Skip to content</a>
-    <div
-      ref={containerRef}
-      style={{
-        width: '100%',
-        height: '100vh',
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        background: 'var(--bg-primary)',
-      }}
-    >
-      <NavDots activeIndex={activeSection} onNavigate={navigateToSection} />
-      <ThemeToggle />
-      <AmbientAudio />
+      <div
+        ref={containerRef}
+        style={{
+          width: '100%',
+          height: '100vh',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          background: 'var(--bg-primary)',
+        }}
+      >
+        <NavDots activeIndex={activeSection} onNavigate={navigateToSection} />
+        <ThemeToggle />
+        <AmbientAudio />
 
-      <main id="main-content">
-        <HeroSection scrollProgress={scrollProgress} />
-        <KpiSection />
-        <SectionDivider />
-        <VelocitySection />
-        <SentimentSection />
-        <SectionDivider />
-        <TopicsSection />
-        <EntitySection />
-        <TimelineSection />
-        <SectionDivider />
-        <StrengthsGapsSection />
-        <PipelineSection />
-        <BIMShowcaseSection />
-        <RiskSection />
-        <SprintSection />
-        <PeopleSection />
-        <RoadmapSection />
-        <QuestionsSection />
-        <ArcSection />
-      </main>
-    </div>
+        <main id="main-content">
+          <HeroSection scrollProgress={scrollProgress} />
+          <KpiSection />
+          <SectionDivider />
+          <VelocitySection />
+          <SentimentSection />
+          <SectionDivider />
+          <TopicsSection />
+          <EntitySection />
+          <TimelineSection />
+          <SectionDivider />
+          <StrengthsGapsSection />
+          <PipelineSection />
+          <BIMShowcaseSection />
+          <RiskSection />
+          <SprintSection />
+          <PeopleSection />
+          <RoadmapSection />
+          <QuestionsSection />
+          <LinksSection />
+          <ArcSection />
+        </main>
+      </div>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<ReviewApp />} />
+          <Route path="/command-center" element={<CommandCenterLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="pipeline" element={<PipelinePage />} />
+            <Route path="portals" element={<PortalsPage />} />
+            <Route path="contacts" element={<ContactsPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
