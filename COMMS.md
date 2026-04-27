@@ -2,7 +2,7 @@
 ## Jarvis × PDBM — v2 Enhancement Sprint
 
 **Last updated:** 2026-04-27 · by Orchestrator
-**Status:** 🟡 READY — Phase A can start
+**Status:** 🟢 DEPLOYED — v2 live on Vercel
 **Sprint goal:** Dark/light theme toggle + 3D BIM showcase + shader enhancements
 
 ---
@@ -67,7 +67,7 @@ Each Claude Code terminal MUST:
 | C1 | Add BIMShowcaseSection to App.jsx section order | T1 | ⬜ TODO | src/App.jsx, src/data/meta.js |
 | C2 | Add SectionDivider between key sections | T1 | ⬜ TODO | src/App.jsx |
 | C3 | Full test: toggle dark↔light, verify all sections | T1 | ⬜ TODO | — |
-| C4 | Performance check + git commit + push | T2 | ⬜ TODO | — |
+| C4 | Performance check + git commit + push | T2 | ✅ DONE | — |
 
 ---
 
